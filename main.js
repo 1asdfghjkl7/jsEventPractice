@@ -5,6 +5,12 @@ const DragDropManager = Object.create(null, {
   
         stages.forEach(stage => {
           // Gain reference of item being dragged
+
+        // if (stage.target.getAttribute("draggable") == "true"){
+        //   stage.dataTransfer.dropEffect = "none";} // dropping is not allowed
+        // else{
+        // stage.dataTransfer.dropEffect = "all";}
+
           stage.ondragstart = e => {
             e.dataTransfer.setData("text", e.target.classList)
           }
@@ -20,15 +26,17 @@ const DragDropManager = Object.create(null, {
           target.ondrop = e => {
             // Enabled dropping on targets
             e.preventDefault()
-  
+
             // Determine what's being dropped
             const data = e.dataTransfer.getData("text")
-  
             // Append card to target component as child
             // TODO: This should only happen if the target has no children nodes
             
+    
             // TODO: This should not happen if the target is another stage card
-            e.target.appendChild(document.querySelector(`.${data.split(" ")[1]}`))
+            if (e.target.hasChildNodes() == false || e.target.tagName == "ARTICLE") {
+              e.target.appendChild(document.querySelector(`.${data.split(" ")[1]}`))
+            }
           }
         })
       }
